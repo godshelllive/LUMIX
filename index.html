@@ -20,6 +20,8 @@
             --text-light: #666;
             --bg-color: #e6e6e6;
             --bg-light: #ffffff;
+            --validation-back: rgb(26, 26, 26);
+            --validation-col: orangered;
             --shadow: 0 3px 15px rgba(0,0,0,0.1);
             --shadow-strong: 0 6px 20px rgba(0,0,0,0.15);
             --border-radius: 16px;
@@ -32,6 +34,8 @@
             --text-color: #f0f0f0;
             --text-light: #aaaaaa;
             --text-contrast: #333;
+            --validation-back: orangered;
+            --validation-col: rgb(22, 22, 22);
             --bg-color: #1e1e1e;
             --bg-light: #2a2a2a;
             --shadow: 0 3px 15px rgba(0,0,0,0.25);
@@ -49,14 +53,14 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: 14px;
-            height: 100dvh;
+            height: 100vh;
             overflow: scroll;
             scrollbar-width: none;
         }
 
         .app-container {
             display: flex;
-            height: 100dvh;
+            height: 100%;
             width: 100vw;
         }
 
@@ -1072,8 +1076,8 @@
             /* New mobile navigation button */
             .mobile-nav-toggle {
                 position: fixed;
-                bottom: 20px;
-                right: 20px;
+                bottom: 68px;
+                right: 13px;
                 width: 50px;
                 height: 50px;
                 border-radius: 50%;
@@ -1360,7 +1364,7 @@
                         </div>
                     </div>
                     <input type="text" id="messageInput" placeholder="Écrivez un message..." style="border: 1px solid var(--text-light);"/>
-                    <button id="sendMessageBtn" class="icon-button" style="background-color: var(--text-light);"><i style="color: var(--text-contrast);" class="fas fa-paper-plane"></i></button>
+                    <button id="sendMessageBtn" class="icon-button" style="background-color: var(--validation-back);"><i style="color: var(--validation-col);" class="fas fa-paper-plane"></i></button>
                 </div>
             </div>
         </div>
