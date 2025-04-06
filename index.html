@@ -1067,21 +1067,44 @@
             .message {
                 max-width: 85%;
             }
-        }
-
-        svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        svg path {
-            fill: url(#flameFill);
-        }
-
-        svg defs {
-            position: absolute;
-            height: 0;
-            width: 0;
+            
+            /* New mobile navigation button */
+            .mobile-nav-toggle {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: var(--gradient-primary);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+                box-shadow: var(--shadow-strong);
+                z-index: 100;
+                cursor: pointer;
+                border: none;
+                animation: pulse 2s infinite;
+            }
+            
+            .mobile-nav-toggle:active {
+                transform: scale(0.95);
+            }
+            
+            /* Mobile adjustments for the chat interface */
+            .chat-header {
+                padding: 10px 15px;
+            }
+            
+            .message-input-container {
+                padding: 10px 15px;
+            }
+            
+            .messages-container {
+                padding: 15px;
+            }
         }
         
         .account-actions {
@@ -1342,6 +1365,11 @@
         </div>
     </div>
     
+    <!-- Mobile navigation toggle button -->
+    <button id="mobileNavToggle" class="mobile-nav-toggle hidden">
+        <i class="fas fa-comments"></i>
+    </button>
+    
     <!-- Settings modal -->
     <div id="settingsModal" class="modal hidden" style="scrollbar-width: none;">
         <div class="modal-content" style="scrollbar-width: none;">
@@ -1510,8 +1538,7 @@
             "fa-repeat", "fa-shuffle", "fa-eject", "fa-headset",
 
             // Catégorie : Véhicules
-            "fa-car", "fa-truck", "fa-bus", "fa-taxi", "fa-bicycle", 
-            "fa-motorcycle","fa-plane", "fa-ship", "fa-subway", "fa-train", "fa-ambulance", 
+            "fa-car", "fa-truck", "fa-bus", "fa-taxi", "fa-bicycle","fa-plane", "fa-ship", "fa-subway", "fa-train", "fa-ambulance", 
             "fa-firetruck", "fa-helicopter", "fa-rocket", "fa-space-shuttle", 
             "fa-trailer", "fa-tractor", "fa-sleigh",
 
@@ -1634,6 +1661,9 @@
             
             // Setup event listeners
             setupEventListeners();
+            
+            // Initialize mobile navigation
+            initMobileNavigation();
         }
 
         // Setup the SVG gradient for the flame icon
@@ -1963,7 +1993,7 @@
             
             // Update avatar (in case it was changed)
             const chatUserAvatar = document.getElementById('chatUserAvatar');
-            chatUserAvatar.innerHTML = `<i class="fas ${currentChatUser.icon}"></i>`;
+            chatUserAvatar.innerHTML = `<i class="fas ${currentChatUser.icon})').</i>`;
         }
 
         // Open chat with a user
@@ -2004,13 +2034,11 @@
             // On mobile, hide sidebar
             if (window.innerWidth <= 768) {
                 document.querySelector('.sidebar').classList.remove('visible');
-            }
-            
-            // Mark all messages as read
-            if (unreadMessages[user.id]) {
-                markAllMessagesAsRead(chatId, user.id);
-                delete unreadMessages[user.id];
-                updateUnreadCounts();
+                // Show the toggle button with messages icon
+                const mobileNavToggle = document.getElementById('mobileNavToggle');
+                if (mobileNavToggle) {
+                    mobileNavToggle.innerHTML = '<i class="fas fa-comments"></i>';
+                }
             }
         }
 
@@ -2967,6 +2995,43 @@
                 'Le thème a été changé avec succès.',
                 newTheme === 'dark' ? 'fa-moon' : 'fa-sun'
             );
+        }
+        
+        // Initialize mobile navigation functionality
+        function initMobileNavigation() {
+            const mobileNavToggle = document.getElementById('mobileNavToggle');
+            const sidebar = document.querySelector('.sidebar');
+            
+            if (!mobileNavToggle) return;
+            
+            // Check if we need to show the mobile nav toggle
+            if (window.innerWidth <= 768) {
+                mobileNavToggle.classList.remove('hidden');
+            } else {
+                mobileNavToggle.classList.add('hidden');
+            }
+            
+            // Toggle sidebar visibility
+            mobileNavToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('visible');
+                
+                // If we're in a chat and toggle the sidebar, hide the button when sidebar is visible
+                if (sidebar.classList.contains('visible')) {
+                    mobileNavToggle.innerHTML = '<i class="fas fa-times"></i>';
+                } else {
+                    mobileNavToggle.innerHTML = '<i class="fas fa-comments"></i>';
+                }
+            });
+            
+            // Listen for window resize to adjust mobile navigation
+            window.addEventListener('resize', () => {
+                if (window.innerWidth <= 768) {
+                    mobileNavToggle.classList.remove('hidden');
+                } else {
+                    mobileNavToggle.classList.add('hidden');
+                    sidebar.classList.remove('visible');
+                }
+            });
         }
     </script>
 </body>
