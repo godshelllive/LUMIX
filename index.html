@@ -12,6 +12,7 @@
     <style>
         :root {
             --gradient-primary: linear-gradient(135deg, #ff0000, #ff8800, #ffcc00);
+            --gradient-primary-forMessage: linear-gradient(135deg, #ffe787f5 , #ff0000ee, #ff8800f8, #ffcc00fa);
             --gradient-secondary: linear-gradient(135deg, #ff8800, #ff0000);
             --primary-dark: #c30000;
             --primary-light: #ffa04c;
@@ -569,20 +570,75 @@
             animation-name: newMessageAnimation;
         }
 
+        :root {
+        --gradient-primary-forMessage: linear-gradient(135deg, #ffe787f5, #ff8800f0, #ff0000e6, #ffcc00f5);
+        }
+
+        @keyframes popIn {
+        0% {
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+        }
+
         .message.outgoing {
             align-self: flex-end;
-            background: var(--gradient-primary);
+            max-width: 75%;
+            background: var(--gradient-primary-forMessage);
             color: white;
-            border-bottom-right-radius: 0;
+            font-weight: 300;
+            padding: 12px 16px;
+            margin: 6px 0;
+            border-radius: 16px 16px 4px 16px;
+            border: none;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(6px);
+            animation: popIn 0.25s ease-out;
             transform-origin: bottom right;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .message.outgoing:hover {
+            transform: scale(1.015);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        :root {
+            --shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
         }
 
         .message.incoming {
             align-self: flex-start;
+            max-width: 75%;
             background-color: var(--bg-light);
+            padding: 12px 16px;
+            margin: 6px 0;
+            border-radius: 16px 16px 16px 4px;
             box-shadow: var(--shadow);
-            border-bottom-left-radius: 0;
+            backdrop-filter: blur(6px);
             transform-origin: bottom left;
+            animation: popIn 0.25s ease-out;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .message.incoming:hover {
+            transform: scale(1.015);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
         }
 
         .message-content {
@@ -654,7 +710,7 @@
 
         .message-input-container {
             width: 100%;
-            max-width: 68vw;
+            max-width: 76vw;
         }
 
         .message-input-container input {
@@ -910,16 +966,6 @@
             animation: fadeInLeft 0.3s ease;
         }
 
-        .reply-line {
-            position: absolute;
-            left: -3px;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: var(--gradient-primary);
-            border-radius: 3px 0 0 3px;
-        }
-
         .message-tag {
             display: flex;
             align-items: center;
@@ -1075,8 +1121,8 @@
         }
 
         @keyframes newMessageAnimation {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% { opacity: 0; transform: translateY(20px);}
+            100% { opacity: 1; transform: translateY(0);}
         }
 
         @media (max-width: 768px) {
@@ -1295,6 +1341,51 @@
             font-size: 18px;
             color: var(--text-light);
         }
+        .message-reply {
+            display: flex;
+            gap: 10px;
+            padding: 3px 7px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid rgb(255, 0, 0);
+            border-radius: 12px;
+            backdrop-filter: blur(6px);
+            box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.08);
+            font-size: 0.9em;
+            position: relative;
+        }
+
+        .reply-content {
+            display: flex;
+            flex-direction: column;
+            max-width: 100%;
+        }
+
+        .reply-sender {
+            display: inline-block;
+            background: rgba(255, 0, 0, 0.664);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-bottom: 4px;
+            width: fit-content;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .reply-text {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.84em;
+            line-height: 1.3em;
+            word-break: break-word;
+            max-height: 3.6em; /* ~3 lignes */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 <body>
@@ -1392,10 +1483,10 @@
                         </button>
                     </div>
                 </div>
-                <div id="messagesContainer" class="messages-container" style="padding-top: 70px; padding-bottom: 130px;">
+                <div id="messagesContainer" class="messages-container" style="padding-top: 80px; padding-bottom: 130px;">
                     <!-- Messages will appear here -->
                 </div>
-                <div class="message-input-container" style="position: fixed; bottom: 0px; right: 0px; z-index: 1;">
+                <div class="message-input-container" style="position: fixed; bottom: 0px; right: 0px; z-index: 1; border-radius: 5px;">
                     <div id="replyPreview" class="message-with-tag hidden">
                         <div class="message-tag">
                             <i class="fas fa-reply"></i> Réponse à <span id="replyToName" style="font-weight: bold;"></span>
@@ -2243,12 +2334,13 @@
             // Create message content
             let contentHTML = '';
             
-            // Add reply preview if this is a reply
             if (message.replyTo) {
                 contentHTML += `
                     <div class="message-reply">
-                        <div class="reply-line"></div>
-                        <strong>${message.replyTo.senderName}:</strong> ${message.replyTo.text}
+                        <div class="reply-content">
+                            <div class="reply-sender">${message.replyTo.senderName}</div>
+                            <div class="reply-text">${message.replyTo.text}</div>
+                        </div>
                     </div>
                 `;
             }
@@ -2260,12 +2352,12 @@
             const time = new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
             if (message.senderId === currentUser.id) {
-                let statusIcon = 'fas fa-circle';
+                let statusIcon = 'fa fa-eye-slash';
                 let statusClass = 'sent';
                 
                 if (message.read) {
                     statusClass = 'read';
-                    statusIcon = 'fas fa-circle';
+                    statusIcon = 'fa fa-eye';
                 }
                 
                 contentHTML += `
@@ -2308,7 +2400,7 @@
                 if (statusElement && message.read) {
                     statusElement.classList.remove('sent');
                     statusElement.classList.add('read');
-                    statusElement.innerHTML = '<i class="fas fa-circle" style="color: #28a745;"></i>';
+                    statusElement.innerHTML = '<i class="fa fa-eye" style="color: #28a745;"></i>';
                 }
             }
         }
