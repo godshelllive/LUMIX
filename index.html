@@ -587,7 +587,6 @@
 
         .message-content {
             position: relative;
-            z-index: 1;
         }
 
         .message-meta {
@@ -651,6 +650,11 @@
             align-items: center;
             gap: 15px;
             width: 100%;
+        }
+
+        .message-input-container {
+            width: 100%;
+            max-width: 68vw;
         }
 
         .message-input-container input {
@@ -1076,6 +1080,11 @@
         }
 
         @media (max-width: 768px) {
+            .message-input-container {
+                width: 100%;
+                max-width: 100%;
+            }
+
             .app-container {
                 flex-direction: column;
             }
@@ -1386,7 +1395,7 @@
                 <div id="messagesContainer" class="messages-container" style="padding-top: 70px; padding-bottom: 130px;">
                     <!-- Messages will appear here -->
                 </div>
-                <div class="message-input-container" style="position: fixed; bottom: 0px; left: 0px; width: 100%; z-index: 1;">
+                <div class="message-input-container" style="position: fixed; bottom: 0px; right: 0px; z-index: 1;">
                     <div id="replyPreview" class="message-with-tag hidden">
                         <div class="message-tag">
                             <i class="fas fa-reply"></i> Réponse à <span id="replyToName" style="font-weight: bold;"></span>
