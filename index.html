@@ -66,13 +66,13 @@
 
         .sidebar {
             width: 320px;
-            height: 100dvh;
             background: var(--bg-light);
             box-shadow: var(--shadow);
             z-index: 2;
             display: flex;
             flex-direction: column;
             transition: var(--transition);
+            height: 100dvh;
             animation: slideInLeft 0.5s ease-out;
         }
 
@@ -483,7 +483,7 @@
         }
 
         .chat-user-info {
-            display: flex;
+            display: flex;            
             align-items: center;
             gap: 15px;
         }
@@ -1371,22 +1371,22 @@
             
             <!-- Chat interface -->
             <div id="chatInterface" class="chat-interface hidden">
-                <div class="chat-header">
-                    <div class="chat-user-info">
-                        <button id="backButton" class="back-button">
-                            <i class="fas fa-arrow-left"></i>
-                        </button>
-                        <div class="avatar" id="chatUserAvatar"></div>
+                <div class="chat-header" style="position: fixed; top: 0px; left: 0px; width: 100%; z-index: 1;">
+                    <div class="chat-user-info" style="margin-left: auto;">
                         <div class="user-details">
-                            <h3 id="chatUsername">Utilisateur</h3>
-                            <span id="userStatus" class="status-indicator">En ligne</span>
+                            <h3 id="chatUsername" style="text-align: right;">Utilisateur</h3>
+                            <span id="userStatus" class="status-indicator" style="text-align: right;">En ligne</span>
                         </div>
+                        <div class="avatar" id="chatUserAvatar"></div>
+                        <button id="backButton" class="back-button">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 </div>
-                <div id="messagesContainer" class="messages-container">
+                <div id="messagesContainer" class="messages-container" style="padding-top: 70px; padding-bottom: 130px;">
                     <!-- Messages will appear here -->
                 </div>
-                <div class="message-input-container">
+                <div class="message-input-container" style="position: fixed; bottom: 0px; left: 0px; width: 100%; z-index: 1;">
                     <div id="replyPreview" class="message-with-tag hidden">
                         <div class="message-tag">
                             <i class="fas fa-reply"></i> Réponse à <span id="replyToName" style="font-weight: bold;"></span>
@@ -1395,7 +1395,12 @@
                         <div id="replyPreviewText" class="reply-preview-text" style="font-size: 13px; color: var(--text-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></div>
                     </div>
                     <div class="message-input-row">
-                        <input type="text" id="messageInput" placeholder="Écrivez un message..." style="border: 1px solid var(--text-light); flex: 1;"/>
+                        <style>
+                            #messageInput{
+                                border: 1px solid var(--text-light);
+                            }
+                        </style>
+                        <input type="text" id="messageInput" placeholder="Écrivez un message..." style="flex: 1;"/>
                         <button id="sendMessageBtn" class="icon-button" style="background-color: var(--validation-back);"><i style="color: var(--validation-col);" class="fas fa-paper-plane"></i></button>
                     </div>
                 </div>
@@ -2023,8 +2028,10 @@
             
             // Update user status display
             const statusElement = document.getElementById('userStatus');
+            const messageInput = document.getElementById('messageInput');
             statusElement.textContent = isOnline ? 'En ligne' : 'Hors ligne';
             statusElement.style.color = isOnline ? '#4CAF50' : '#999';
+            messageInput.style.border = isOnline ? "1px solid lightGreen" : "1px solid var(--text-light)";
             
             // Update username (in case it was changed)
             document.getElementById('chatUsername').textContent = currentChatUser.username;
